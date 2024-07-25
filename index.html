@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0%;
+            background-color: forestgreen;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            background-color: azure;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Weather app</h1>
+        <p>
+            Orlando, Florida
+        </p>
+        <input type="text" id="cityInput" placeholder="Enter City Here">
+        <button onclick="getWeather()">
+            Get Weather
+        </button>
+        <div id="weatherInfo"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById("cityInput").value; // Get city input value
+            const apiKey = "4a3a9cbf7eb64b96821204916242906";
+            const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`; // Correctly formatted API URL
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherInfo = document.getElementById("weatherInfo");
+                    weatherInfo.innerHTML = `
+                        <h2>${data.location.name}</h2>
+                        <p>${data.current.condition.text}</p>
+                        <p>Temperature: ${data.current.temp_f} F</p>
+                        <p>Humidity: ${data.current.humidity}%</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data:", error);
+                    const weatherInfo = document.getElementById("weatherInfo");
+                    weatherInfo.innerHTML = "<p>Failed to fetch weather data. Please try again later.</p>";
+                });
+        }
+    </script>
+</body>
+</html>
